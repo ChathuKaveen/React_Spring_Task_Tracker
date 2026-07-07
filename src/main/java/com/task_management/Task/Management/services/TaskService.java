@@ -1,0 +1,47 @@
+package com.task_management.Task.Management.services;
+
+import com.task_management.Task.Management.dtos.RegisterTaskRequest;
+import com.task_management.Task.Management.dtos.TaskDto;
+import com.task_management.Task.Management.entities.Task;
+import com.task_management.Task.Management.enums.TaskStatus;
+import com.task_management.Task.Management.exceptions.TaskDueDayCantBeforeTodayException;
+import com.task_management.Task.Management.exceptions.UserNotFound;
+import com.task_management.Task.Management.mappers.TaskMapper;
+import com.task_management.Task.Management.repositories.TaskRepository;
+import com.task_management.Task.Management.repositories.UserRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Service
+@AllArgsConstructor
+public class TaskService {
+
+    private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
+    private final TaskMapper taskMapper;
+    public TaskDto createTask(RegisterTaskRequest request){
+        Task task = new Task();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var userId =(Long) authentication.getPrincipal();
+        if(userId == null){
+            throw new UserNotFound();
+        }
+        var user = userRepository.findById(userId).orElse(null);
+        task.setOwner(user);
+        task.setDescription(request.getDescription());
+        task.setStatus(TaskStatus.PENDING);
+        task.setTitle(request.getTitle());
+        if(request.getDueDate().isBefore(LocalDate.now())){
+            throw new TaskDueDayCantBeforeTodayException("Due-Date must not be older date");
+        }
+        task.setDueDate(request.getDueDate().atStartOfDay());
+        var saved = taskRepository.save(task);
+
+        return taskMapper.toDto(saved);
+    }
+}
