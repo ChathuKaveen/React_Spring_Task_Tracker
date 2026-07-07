@@ -34,10 +34,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+        var role = jwtService.getRoleFromToken(token);
         var authentication  = new UsernamePasswordAuthenticationToken(
                 jwtService.getUserIdFromToken(token) ,
                 null ,
-                null
+                List.of(new SimpleGrantedAuthority("ROLE_" + role))
         );
 
 //        var authentication  = new UsernamePasswordAuthenticationToken(

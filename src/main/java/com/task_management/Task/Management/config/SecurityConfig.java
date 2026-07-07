@@ -1,5 +1,6 @@
 package com.task_management.Task.Management.config;
 
+import com.task_management.Task.Management.enums.Role;
 import com.task_management.Task.Management.filters.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -55,10 +56,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST , "/user/**").permitAll()
                         .requestMatchers(HttpMethod.POST , "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST , "/auth/refresh").permitAll()
+                        .requestMatchers(HttpMethod.GET , "/admin/**").hasRole(Role.ADMIN.name())
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter , UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(c->c.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
+                .exceptionHandling(c->{
+                    c.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+                    c.accessDeniedHandler(((request, response, accessDeniedException) ->
+                            response.setStatus(HttpStatus.FORBIDDEN.value())));
+                });
 
         return http.build();
 

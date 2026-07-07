@@ -2,6 +2,7 @@ package com.task_management.Task.Management.services;
 
 import com.task_management.Task.Management.config.JwtConfig;
 import com.task_management.Task.Management.entities.User;
+import com.task_management.Task.Management.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -58,5 +59,9 @@ public class JwtService {
 
     public Long getUserIdFromToken(String token){
         return Long.valueOf(getClaims(token).getSubject());
+    }
+
+    public Role getRoleFromToken(String token){
+        return Role.valueOf(getClaims(token).get("role" , String.class));
     }
 }
