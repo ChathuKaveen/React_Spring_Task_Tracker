@@ -1,5 +1,6 @@
 package com.task_management.Task.Management.dtos;
 
+import com.task_management.Task.Management.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

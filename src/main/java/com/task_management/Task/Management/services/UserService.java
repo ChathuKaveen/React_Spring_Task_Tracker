@@ -3,6 +3,7 @@ package com.task_management.Task.Management.services;
 import com.task_management.Task.Management.dtos.RegisterUserRequest;
 import com.task_management.Task.Management.dtos.UpdateUserRequest;
 import com.task_management.Task.Management.dtos.UserDto;
+import com.task_management.Task.Management.enums.Role;
 import com.task_management.Task.Management.exceptions.UserAlreadyExisist;
 import com.task_management.Task.Management.exceptions.UserNotFound;
 import com.task_management.Task.Management.mappers.UserMapper;
@@ -25,6 +26,7 @@ public class UserService {
             throw new UserAlreadyExisist("User Already Exist");
         }
         obj.setPassword(passwordEncoder.encode(request.getPassword()));
+        obj.setRole(Role.USER);
         userRepository.save(obj);
         return userMapper.toDto(obj);
     }

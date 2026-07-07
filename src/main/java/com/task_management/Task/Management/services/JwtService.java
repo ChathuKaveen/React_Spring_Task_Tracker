@@ -32,6 +32,7 @@ public class JwtService {
                 .subject(user.getId().toString())
                 .claim("email", user.getEmail())
                 .claim("name", user.getName())
+                .claim("role", user.getRole())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * tokenExperation))
                 .signWith(Keys.hmacShaKeyFor(jwtConfig.getSecret().getBytes()))

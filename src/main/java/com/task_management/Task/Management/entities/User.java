@@ -1,5 +1,6 @@
 package com.task_management.Task.Management.entities;
 
+import com.task_management.Task.Management.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,9 @@ public class User {
     private String name;
     @Column(nullable = false , name = "email")
     private String email;
+    @Column(nullable = false , name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @Column(nullable = false , name = "password")
     private String password;
 }
