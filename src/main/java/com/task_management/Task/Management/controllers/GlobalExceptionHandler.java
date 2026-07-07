@@ -2,6 +2,7 @@ package com.task_management.Task.Management.controllers;
 
 import com.task_management.Task.Management.dtos.ErrorResponseDto;
 import com.task_management.Task.Management.exceptions.TaskDueDayCantBeforeTodayException;
+import com.task_management.Task.Management.exceptions.TaskNotFoundException;
 import com.task_management.Task.Management.exceptions.UserAlreadyExisist;
 import com.task_management.Task.Management.exceptions.UserNotFound;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TaskDueDayCantBeforeTodayException.class)
     public ResponseEntity<ErrorResponseDto> TaskDueDayCantBeforeTodayExceptionHandler(TaskDueDayCantBeforeTodayException ex){
         ErrorResponseDto error = new ErrorResponseDto(HttpStatus.BAD_REQUEST.value() , ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(TaskNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> TaskNotFoundExceptionHandler(TaskNotFoundException ex){
+        ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value() , ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 

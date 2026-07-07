@@ -2,9 +2,11 @@ package com.task_management.Task.Management.services;
 
 import com.task_management.Task.Management.dtos.RegisterTaskRequest;
 import com.task_management.Task.Management.dtos.TaskDto;
+import com.task_management.Task.Management.dtos.UpdateTaskRequest;
 import com.task_management.Task.Management.entities.Task;
 import com.task_management.Task.Management.enums.TaskStatus;
 import com.task_management.Task.Management.exceptions.TaskDueDayCantBeforeTodayException;
+import com.task_management.Task.Management.exceptions.TaskNotFoundException;
 import com.task_management.Task.Management.exceptions.UserNotFound;
 import com.task_management.Task.Management.mappers.TaskMapper;
 import com.task_management.Task.Management.repositories.TaskRepository;
@@ -59,5 +61,40 @@ public class TaskService {
         PageRequest pageRequest = PageRequest.of(page , size);
         Page<Task> taskList = taskRepository.findWithFilters(status , DueDate , pageRequest);
         return taskList;
+    }
+
+    public TaskDto getTaskById(Long id){
+        var task = taskRepository.findById(id).orElse(null);
+        if(task == null){
+            throw new TaskNotFoundException("Task Not Found");
+        }
+        return taskMapper.toDto(task);
+    }
+
+    public TaskDto updateTask(UpdateTaskRequest request , Long id){
+        var task = taskRepository.findById(id).orElse(null);
+        if(task == null){
+            throw new TaskNotFoundException("Task Not Found");
+        }
+
+        task.setDescription(request.getDescription());
+        task.setStatus(request.getStatus());
+        task.setTitle(request.getTitle());
+        if(request.getDueDate().isBefore(LocalDate.now())){
+            throw new TaskDueDayCantBeforeTodayException("Due-Date must not be older date");
+        }
+        task.setDueDate(request.getDueDate().atStartOfDay());
+        var saved = taskRepository.save(task);
+
+        return taskMapper.toDto(saved);
+
+    }
+
+    public void deleteTask(Long id){
+        var task = taskRepository.findById(id).orElse(null);
+        if(task == null){
+            throw new TaskNotFoundException("Task Not Found");
+        }
+        taskRepository.delete(task);
     }
 }

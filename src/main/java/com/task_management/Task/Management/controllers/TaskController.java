@@ -1,7 +1,9 @@
 package com.task_management.Task.Management.controllers;
 
 import com.task_management.Task.Management.dtos.RegisterTaskRequest;
+import com.task_management.Task.Management.dtos.TaskDto;
 import com.task_management.Task.Management.dtos.TaskPageResponse;
+import com.task_management.Task.Management.dtos.UpdateTaskRequest;
 import com.task_management.Task.Management.enums.TaskStatus;
 import com.task_management.Task.Management.mappers.TaskMapper;
 import com.task_management.Task.Management.services.TaskService;
@@ -46,4 +48,22 @@ public class TaskController {
         );
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskDto> getLeaveById(@PathVariable(name = "id") Long id){
+        return ResponseEntity.ok(taskService.getTaskById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTask(@RequestBody UpdateTaskRequest request , @PathVariable(name = "id") Long id){
+        return ResponseEntity.ok(taskService.updateTask(request , id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTask(@PathVariable(name = "id") Long id){
+        taskService.deleteTask(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
