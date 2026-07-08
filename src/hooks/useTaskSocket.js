@@ -8,14 +8,14 @@ export default function useTaskSocket(onTaskEvent) {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const socket = new SockJS("http://localhost:8080/v1/api/ws-task-tracker");
+    const socket = new SockJS("http://localhost:8080/ws-task-tracker");
 
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: token ? { Authorization: `Bearer ${token}` } : {},
       reconnectDelay: 5000,
       onConnect: () => {
-        client.subscribe("/topic/tasks", (message) => {
+        client.subscribe("/topic/task", (message) => {
           try {
             onTaskEvent(JSON.parse(message.body));
           } catch {

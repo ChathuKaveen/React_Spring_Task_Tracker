@@ -7,8 +7,8 @@ import TaskCard from "../components/TaskCard";
 import TaskFormModal from "../components/TaskFormModal";
 import Pagination from "../components/Pagination";
 
-const STATUS_FILTERS = ["ALL", "TODO", "IN_PROGRESS", "DONE"];
-const PAGE_SIZE = 9;
+const STATUS_FILTERS = ["ALL", "PENDING", "IN_PROGRESS", "COMPLETED"];
+const PAGE_SIZE = 6; 
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -18,10 +18,10 @@ export default function Dashboard() {
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(0);
   const [status, setStatus] = useState("ALL");
-  const [owner, setOwner] = useState(""); // admin-only filter
+  const [userId, setUserId] = useState(""); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [modalTask, setModalTask] = useState(null); // null = closed, {} = create, task = edit
+  const [modalTask, setModalTask] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const fetchTasks = useCallback(async () => {
@@ -30,27 +30,28 @@ export default function Dashboard() {
     try {
       const params = { page, size: PAGE_SIZE };
       if (status !== "ALL") params.status = status;
-      if (isAdmin && owner) params.owner = owner;
+      let endpoint = "/task";
+      if (isAdmin) {
+        endpoint = "/task/all-tasks";
+        if (userId) params.userId = userId;
+      }
 
-      // Non-admin users only ever see their own tasks; adjust if your
-      // backend already scopes /tasks by the authenticated user.
-      const endpoint = isAdmin ? "/tasks" : "/tasks/mine";
       const { data } = await api.get(endpoint, { params });
-
-      setTasks(data.content || data.tasks || []);
+      console.log(data.data)
+      setTasks(data.data|| []);
       setTotalPages(data.totalPages ?? 1);
     } catch (err) {
       setError("Could not load tasks");
     } finally {
       setLoading(false);
     }
-  }, [page, status, owner, isAdmin]);
+  }, [page, status, userId, isAdmin]);
 
   useEffect(() => {
     fetchTasks();
   }, [fetchTasks]);
 
-  // Live updates: refetch current page when a task event arrives
+  // Live update: Refetch current page when a task event happenss
   useTaskSocket(() => fetchTasks());
 
   const handleCreate = () => {
@@ -65,15 +66,26 @@ export default function Dashboard() {
 
   const handleDelete = async (id) => {
     if (!confirm("Delete this task?")) return;
-    await api.delete(`/tasks/${id}`);
+    await api.delete(`/task/${id}`);
     fetchTasks();
   };
 
   const handleSubmit = async (form) => {
     if (modalTask?.id) {
-      await api.put(`/tasks/${modalTask.id}`, form);
+      // PUT /task/{id} — includes status
+      await api.put(`/task/${modalTask.id}`, {
+        title: form.title,
+        description: form.description,
+        dueDate: form.dueDate,
+        status: form.status,
+      });
     } else {
-      await api.post("/tasks", form);
+      // POST /task — no status on create
+      await api.post("/task", {
+        title: form.title,
+        description: form.description,
+        dueDate: form.dueDate,
+      });
     }
     fetchTasks();
   };
@@ -113,13 +125,14 @@ export default function Dashboard() {
 
           {isAdmin && (
             <input
-              placeholder="Filter by owner"
-              value={owner}
+              type="number"
+              placeholder="Filter by user ID"
+              value={userId}
               onChange={(e) => {
-                setOwner(e.target.value);
+                setUserId(e.target.value);
                 setPage(0);
               }}
-              className="rounded-md border border-slate-300 px-3 py-1.5 text-sm"
+              className="rounded-md border border-slate-300 px-3 py-1.5 text-sm w-40"
             />
           )}
         </div>
@@ -136,7 +149,7 @@ export default function Dashboard() {
               <TaskCard
                 key={task.id}
                 task={task}
-                canEdit={isAdmin || task.owner === user.username}
+                canEdit={isAdmin || task.userId === user.id}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
               />

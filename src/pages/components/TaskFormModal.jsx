@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const STATUS_OPTIONS = ["TODO", "IN_PROGRESS", "DONE"];
+const STATUS_OPTIONS = ["PENDING", "IN_PROGRESS", "COMPLETED"];
 
 export default function TaskFormModal({ initialTask, onClose, onSubmit }) {
   const [form, setForm] = useState({

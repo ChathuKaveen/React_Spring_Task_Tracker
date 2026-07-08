@@ -8,10 +8,11 @@ export function AuthProvider({ children }) {
     const stored = localStorage.getItem("user");
     return stored ? JSON.parse(stored) : null;
   });
-
+  const [loading, setLoading] = useState(false);
   
   const login = async (email, password) => {
     const { data } = await api.post("auth/login", { email, password });
+    debugger
     // expects: { token, username, role }
     localStorage.setItem("token", data.token);
     const userData = { email: data.email, role: data.role };
@@ -20,8 +21,8 @@ export function AuthProvider({ children }) {
     return userData;
   };
 
-  const register = async (email, password) => {
-    await api.post("/auth/register", { email, password });
+  const register = async (username, password) => {
+    await api.post("/user", { username, password });
   };
 
   const logout = () => {

@@ -24,7 +24,7 @@ export default function TaskCard({ task, canEdit, onEdit, onDelete }) {
 
       <div className="flex items-center justify-between text-xs text-slate-400 mt-1">
         <span>Due {task.dueDate || "—"}</span>
-        <span>Owner: {task.owner}</span>
+        <span>Owner: {task.owner.name}</span>
       </div>
 
       {canEdit && (
