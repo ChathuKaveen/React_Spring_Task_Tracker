@@ -9,7 +9,7 @@ export function AuthProvider({ children }) {
     return stored ? JSON.parse(stored) : null;
   });
 
-  // Adjust endpoint/fields to match your backend response shape
+  
   const login = async (username, password) => {
     const { data } = await api.post("/auth/login", { username, password });
     // expects: { token, username, role }
