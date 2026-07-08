@@ -1,9 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
 import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
-
-import Navbar from "../component-pages/Navbar";
-
+import useTaskSocket from "../../hooks/useTaskSocket";
+import Navbar from "./Navbar";
+import TaskCard from "../components/TaskCard";
+import TaskFormModal from "../components/TaskFormModal";
+import Pagination from "../components/Pagination";
 
 const STATUS_FILTERS = ["ALL", "TODO", "IN_PROGRESS", "DONE"];
 const PAGE_SIZE = 9;
@@ -48,7 +50,8 @@ export default function Dashboard() {
     fetchTasks();
   }, [fetchTasks]);
 
-
+  // Live updates: refetch current page when a task event arrives
+  useTaskSocket(() => fetchTasks());
 
   const handleCreate = () => {
     setModalTask(null);
@@ -123,12 +126,34 @@ export default function Dashboard() {
 
         {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
 
-        
+        {loading ? (
+          <p className="text-sm text-slate-400">Loading tasks...</p>
+        ) : tasks.length === 0 ? (
+          <p className="text-sm text-slate-400">No tasks found.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {tasks.map((task) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                canEdit={isAdmin || task.owner === user.username}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        )}
 
-       
+        <Pagination page={page} totalPages={totalPages} onChange={setPage} />
       </div>
 
-      
+      {showModal && (
+        <TaskFormModal
+          initialTask={modalTask}
+          onClose={() => setShowModal(false)}
+          onSubmit={handleSubmit}
+        />
+      )}
     </div>
   );
 }
