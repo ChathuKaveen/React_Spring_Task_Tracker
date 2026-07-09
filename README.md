@@ -9,7 +9,7 @@
 
 <p>A secure, real-time, full-stack Task Tracker application built using <strong>Spring Boot (Java)</strong> and <strong>React (JavaScript)</strong>. The system implements secure Token-Based JWT Authentication alongside Role-Based Access Control (RBAC) to separate ordinary user permissions from full administrative system visibility.</p>
 
-<p>This repository uses a monorepo layout containing both individual application tiers and a consolidated <strong>Docker Compose</strong> setup for rapid deployment.</p>
+<p>This repository uses a monorepo layout containing both individual application tiers and a consolidated <strong>Docker Compose</strong> setup for rapid deployment utilizing environment configuration files.</p>
 
 <hr>
 
@@ -34,7 +34,17 @@
 
 <h2>🚀 Local Setup Instructions (Using Docker Compose)</h2>
 
-<h3>1. Bring up the Containers</h3>
+<h3>1. Configure Environment Variables</h3>
+<p>Before launching the containers, you need to create your environment configuration file from the provided template:</p>
+<ol>
+    <li>In the project root directory, look for the <code>.env.example</code> file.</li>
+    <li>Duplicate it or rename it to <code>.env</code>:
+        <pre><code>cp .env.example .env</code></pre>
+    </li>
+    <li>Open the newly created <code>.env</code> file and make sure the parameters (such as your secure JWT Token Secret) are set correctly. Docker Compose automatically references this file to inject properties into your application runtime.</li>
+</ol>
+
+<h3>2. Bring up the Containers</h3>
 <p>From the root folder where your <code>docker-compose.yml</code> file is located, run the following command to build and launch all services:</p>
 <pre><code>docker compose up --build -d</code></pre>
 <p>This will initialize three isolated bridge network services:</p>
@@ -44,7 +54,7 @@
     <li><strong>React Frontend:</strong> Bound locally to port <code>80</code></li>
 </ul>
 
-<h3>2. Critical Database Initialization (Schema Import)</h3>
+<h3>3. Critical Database Initialization (Schema Import)</h3>
 <p>Because automated Hibernate schema migrations do not execute initially due to database startup constraints, you <strong>must</strong> manually import the provided SQL export dump file using one of the following two options:</p>
 
 <h4>Option A: Database Import via MySQL Workbench / Client (Recommended)</h4>
@@ -58,7 +68,7 @@
             <li><strong>Password:</strong> <code>root</code></li>
         </ul>
     </li>
-    <li>Once connected, open the provided <code>.sql</code> database export file included in this repository.</li>
+    <li>Once connected, open the provided <code>db_export.sql</code> database export file included in this repository.</li>
     <li>Execute the entire script to generate the required <code>task_tracker</code> schema tables and insert initial test data.</li>
 </ol>
 
@@ -72,8 +82,10 @@
 ├── Task-Management-Back-End/     # Spring Boot Source Code &amp; Dockerfile
 ├── Task-Management-Front-End/    # React Web Application &amp; Dockerfile
 ├── Postman/                      # Postman JSON Collection Export Files
+├── .env.example                  # Environment Configuration Template Example
+├── .env                          # Local Environment Configuration File (Ignored by Git)
 ├── db_export.sql                 # MySQL Schema Initialization Dump
-└── docker-compose.yml            # Parent Orchid Deployment Template</code></pre>
+└── docker-compose.yml            # Parent Orchestration Deployment Template</code></pre>
 
 <hr>
 
