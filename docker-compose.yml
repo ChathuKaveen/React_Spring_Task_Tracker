@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # 1. Database Service
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: task_tracker
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - task-tracker-network
+
+  # 2. Spring Boot Backend Service
+  backend:
+    build:
+      context: ./Task-Management-Back-End
+      dockerfile: Dockerfile
+    container_name: spring-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/task_tracker?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - JWT_SECRET="7vP+V6/hQ7lu04P0nKDos5fAfMvVEQTJLlNXRBuzmXQ="
+    depends_on:
+      - mysql-db
+    networks:
+      - task-tracker-network
+
+  # 3. React Frontend Service
+  frontend:
+    build:
+      context: ./Task-Management-Front-End
+      dockerfile: Dockerfile
+    container_name: react-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - task-tracker-network
+
+volumes:
+  mysql_data:
+
+networks:
+  task-tracker-network:
+    driver: bridge
