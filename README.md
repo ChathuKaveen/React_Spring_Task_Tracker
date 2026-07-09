@@ -5,120 +5,120 @@
 </head>
 <body>
 
-    <h1>📝 Full-Stack Task Tracker Application (Dockerized)</h1>
-    <p>A secure, real-time, full-stack Task Tracker application built using <strong>Spring Boot (Java)</strong>, <strong>React (JavaScript)</strong>, and <strong>MySQL</strong>. The system implements secure Token-Based JWT Authentication alongside Role-Based Access Control (RBAC) to isolate standard user boundaries from full administrative privileges.</p>
+<h1>📝 Full-Stack Task Tracker Application</h1>
 
-    <hr />
+<p>A secure, real-time, full-stack Task Tracker application built using <strong>Spring Boot (Java)</strong> and <strong>React (JavaScript)</strong>. The system implements secure Token-Based JWT Authentication alongside Role-Based Access Control (RBAC) to separate ordinary user permissions from full administrative system visibility.</p>
 
-    <h2>🏗️ Architecture & Core Features</h2>
-    <ul>
-        <li><strong>Backend Service:</strong> Spring Boot API layer utilizing Spring Security, JWT, and Spring Data JPA.</li>
-        <li><strong>Frontend Service:</strong> React client optimized via Vite, React Router, and Axios. Built and served via Nginx.</li>
-        <li><strong>Database Layer:</strong> Relational persistence managed inside a isolated MySQL container.</li>
-        <li><strong>Real-Time Updates:</strong> Implemented via <strong>WebSockets with STOMP protocol</strong> to broadcast live task mutations immediately across connected browser clients without requiring page polling.</li>
-    </ul>
+<p>This repository uses a monorepo layout containing both individual application tiers and a consolidated <strong>Docker Compose</strong> setup for rapid deployment.</p>
 
-    <hr />
+<hr>
 
-    <h2>📂 Monorepo Directory Structure</h2>
-    <pre>
-├── Task-Management-Back-End/   # Spring Boot Project Source & Dockerfile
-├── Task-Management-Front-End/  # React Project Source & Dockerfile
-├── Postman/                    # Postman Collection JSON Exports
-├── database/                   # Contains task_tracker.sql (Database Dump)
-└── docker-compose.yml          # Root orchestration pipeline configuration
-    </pre>
+<h2>🏗️ Architecture &amp; Core Features</h2>
+<ul>
+    <li><strong>Backend API:</strong> Built with Spring Boot, Spring Security (JWT), and Spring Data JPA.</li>
+    <li><strong>Frontend Client:</strong> Built with React, utilizing Vite, React Router, and Axios.</li>
+    <li><strong>Database Persistence Layer:</strong> Powered by MySQL 8.0.</li>
+    <li><strong>Real-Time Task Updates:</strong> Implemented using <strong>WebSockets with STOMP protocol</strong> to broadcast live task changes (creations, edits, or deletions) instantly across all connected user dashboards without requiring page refreshes.</li>
+</ul>
 
-    <hr />
+<hr>
 
-    <h2>🚀 Quick Start & Environment Setup</h2>
+<h2>🔑 Pre-configured Admin Credentials</h2>
+<p>For testing and evaluation purposes, use the following pre-existing administrative credentials:</p>
+<ul>
+    <li><strong>Email / Username:</strong> <code>13@gg.com</code></li>
+    <li><strong>Password:</strong> <code>12</code></li>
+</ul>
 
-    <h3>Option A: Automated Deployment via Docker Compose (Recommended)</h3>
-    <p>Ensure you have Docker and Docker Compose installed locally, then execute the following steps:</p>
+<hr>
 
-    <h4>1. Build and Start the Containers</h4>
-    <p>Run this command from the root directory to spin up the network, database volume, and services:</p>
-    <pre><code>docker compose up --build -d</code></pre>
+<h2>🚀 Local Setup Instructions (Using Docker Compose)</h2>
 
-    <h4>2. CRITICAL STEP: Manual Database Schema Import</h4>
-    <p>Because automated JPA/Hibernate migrations are restricted by internal network constraints during container instantiation, you <strong>must</strong> manually import the initial database structure and seed data before testing.</p>
-    
-    <p>The MySQL instance is exposed securely to your host machine on port <strong><code>3307</code></strong>. Choose one of the following methods to initialize it:</p>
+<h3>1. Bring up the Containers</h3>
+<p>From the root folder where your <code>docker-compose.yml</code> file is located, run the following command to build and launch all services:</p>
+<pre><code>docker compose up --build -d</code></pre>
+<p>This will initialize three isolated bridge network services:</p>
+<ul>
+    <li><strong>MySQL Database:</strong> Bound locally to port <code>3307</code></li>
+    <li><strong>Spring Boot Backend:</strong> Bound locally to port <code>8080</code></li>
+    <li><strong>React Frontend:</strong> Bound locally to port <code>80</code></li>
+</ul>
 
-    <h5>Method 1: via MySQL Workbench / TablePlus (GUI)</h5>
-    <ul>
-        <li>Open your preferred SQL client tool.</li>
-        <li>Establish a new connection using these parameters:
-            <ul>
-                <li><strong>Host:</strong> <code>127.0.0.1</code> or <code>localhost</code></li>
-                <li><strong>Port:</strong> <code>3307</code> <em>(Note: Internal container maps 3306 to 3307 on your host)</em></li>
-                <li><strong>Username:</strong> <code>root</code></li>
-                <li><strong>Password:</strong> <code>root</code></li>
-                <li><strong>Database:</strong> <code>task_tracker</code></li>
-            </ul>
-        </li>
-        <li>Open and execute the SQL script provided inside the <code>/database/task_tracker.sql</code> file to build the initial schema and populate user data.</li>
-    </ul>
+<h3>2. Critical Database Initialization (Schema Import)</h3>
+<p>Because automated Hibernate schema migrations do not execute initially due to database startup constraints, you <strong>must</strong> manually import the provided SQL export dump file using one of the following two options:</p>
 
-    <h5>Method 2: via Command Line (CLI)</h5>
-    <p>If you have a local MySQL client utility installed on your terminal, execute the following direct pipeline import command from the project root:</p>
-    <pre><code>mysql -h 127.0.0.1 -P 3307 -u root -proot task_tracker &lt; ./database/task_tracker.sql</code></pre>
+<h4>Option A: Database Import via MySQL Workbench / Client (Recommended)</h4>
+<ol>
+    <li>Open <strong>MySQL Workbench</strong> or your preferred database client.</li>
+    <li>Establish a new connection using the following configurations:
+        <ul>
+            <li><strong>Hostname:</strong> <code>127.0.0.1</code> (or <code>localhost</code>)</li>
+            <li><strong>Port:</strong> <code>3307</code></li>
+            <li><strong>Username:</strong> <code>root</code></li>
+            <li><strong>Password:</strong> <code>root</code></li>
+        </ul>
+    </li>
+    <li>Once connected, open the provided <code>.sql</code> database export file included in this repository.</li>
+    <li>Execute the entire script to generate the required <code>task_tracker</code> schema tables and insert initial test data.</li>
+</ol>
 
-    <hr />
+<h4>Option B: Manual Local Setup (Alternative)</h4>
+<p>If you prefer not to use Docker, ensure a native instance of MySQL is running on your machine on default port <code>3306</code>, create a database named <code>task_tracker</code>, configure your local database credentials inside the backend's <code>pom.xml</code> / properties settings, and seed the schema manually.</p>
 
-    <h3>Option B: Local Native Setup (Fallback)</h3>
-    <p>If you prefer running the application outside of Docker container runtimes, follow this layout:</p>
-    <ol>
-        <li>Configure a local native MySQL server instance using the database properties defined in your backend's <code>pom.xml</code> / <code>application.properties</code> files.</li>
-        <li>Import the <code>/database/task_tracker.sql</code> schema script manually.</li>
-        <li>Run the Spring Boot application locally via your IDE or command terminal: <code>mvn spring-boot:run</code>.</li>
-        <li>Install dependencies and start the React app locally: <code>npm install && npm run dev</code>.</li>
-    </ol>
+<hr>
 
-    <hr />
+<h2>📂 Project Structure</h2>
+<pre><code>.
+├── Task-Management-Back-End/     # Spring Boot Source Code &amp; Dockerfile
+├── Task-Management-Front-End/    # React Web Application &amp; Dockerfile
+├── Postman/                      # Postman JSON Collection Export Files
+├── db_export.sql                 # MySQL Schema Initialization Dump
+└── docker-compose.yml            # Parent Orchid Deployment Template</code></pre>
 
-    <h2>🔑 Seeded Authentication Credentials</h2>
-    <p>The database dump contains pre-configured test profiles to instantly bypass authorization testing setup configurations:</p>
-    
-    <table border="1" cellpadding="6" cellspacing="0">
-        <thead>
-            <tr style="background-color: #f2f2f2;">
-                <th>Role Type</th>
-                <th>Username / Email Address</th>
-                <th>Plain-text Password</th>
-                <th>Permissions Context</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>System Administrator</strong></td>
-                <td><code>13@gg.com</code></td>
-                <td><code>12</code></td>
-                <td>Authorized to view and manage tasks for all global accounts.</td>
-            </tr>
-            <tr>
-                <td><strong>Standard User</strong></td>
-                <td><em>Register via UI</em></td>
-                <td><em>Configured on registration</em></td>
-                <td>Isolated completely to personal task actions (CRUD own records).</td>
-            </tr>
-        </tbody>
-    </table>
+<hr>
 
-    <hr />
+<h2>📂 API Testing via Postman</h2>
+<p>A complete <strong>Postman Collection</strong> is provided within the <code>/Postman</code> folder of the repository root.</p>
+<ol>
+    <li>Import the collection JSON file directly into Postman.</li>
+    <li>Execute the <strong>Login</strong> request using the admin credentials (<code>13@gg.com</code> / <code>12</code>).</li>
+    <li>The collection includes a post-execution test script that automatically captures the returned JWT token and stores it inside an active collection variable environment context (<code>{{jwt_token}}</code>), letting you run all other protected endpoints seamlessly without manual copy-pasting.</li>
+</ol>
 
-    <h2>🌐 Service Access Ports Mapping</h2>
-    <p>Once the docker compose orchestrator changes state to active, the individual application points can be reached via your browser:</p>
-    <ul>
-        <li><strong>Frontend Application Interface:</strong> <a href="http://localhost" target="_blank">http://localhost</a> (Port <code>80</code>)</li>
-        <li><strong>Backend Rest API Target:</strong> <a href="http://localhost:8080" target="_blank">http://localhost:8080</a> (Port <code>8080</code>)</li>
-        <li><strong>External Database Port Connection:</strong> <code>localhost:3307</code></li>
-    </ul>
+<hr>
 
-    <hr />
+<h2>🔒 Role-Based Access Control (RBAC) Model</h2>
+<p>The application strictly secures task states based on user accounts:</p>
+<table>
+    <thead>
+        <tr>
+            <th>Feature Matrix</th>
+            <th>User Role (<code>ROLE_USER</code>)</th>
+            <th>Admin Role (<code>ROLE_ADMIN</code>)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Task Actions</strong></td>
+            <td>Create, view, update, and delete <strong>only their own</strong> tasks.</td>
+            <td>View, modify, and delete <strong>any task</strong> globally across the organization.</td>
+        </tr>
+        <tr>
+            <td><strong>System Visibility</strong></td>
+            <td>Restricted entirely to personal resources.</td>
+            <td>Complete access to view all systemic application records.</td>
+        </tr>
+    </tbody>
+</table>
 
-    <h2>📂 API Documentation via Postman</h2>
-    <p>The complete, test-ready <strong>Postman Collection</strong> can be found inside the <code>/Postman</code> folder. Import this JSON directly into Postman to test all endpoints. The collection contains automated pre-request scripts that save returning JWT tokens to collection context automatically upon a successful administrative login request.</p>
+<hr>
+
+<h2>💡 Engineering &amp; Design Decisions</h2>
+<h3>1. WebSockets with STOMP Over Polling</h3>
+<p>To satisfy the real-time update requirements, <strong>WebSockets with STOMP</strong> were chosen instead of standard periodic API HTTP polling. Polling creates substantial server connection overhead and processing delays. WebSockets maintain a single lightweight TCP connection pipeline, serving live events to clients instantly upon data mutations.</p>
+
+<h3>2. Secured Ownership Check Architecture</h3>
+<p>While global administrators can execute methods on paths like <code>/task/all-tasks</code>, individual endpoint operations (<code>PUT</code>, <code>DELETE</code>) are validated at the method/service layer using explicit ownership controls. This checks that an ordinary user cannot alter or delete tasks belonging to other accounts simply by tampering with path parameter IDs.</p>
 
 </body>
 </html>
