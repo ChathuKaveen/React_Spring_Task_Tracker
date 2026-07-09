@@ -1,7 +1,7 @@
 package com.task_management.Task.Management.mappers;
 
-import com.task_management.Task.Management.dtos.RegisterTaskRequest;
-import com.task_management.Task.Management.dtos.TaskDto;
+import com.task_management.Task.Management.dtos.taskDtos.RegisterTaskRequest;
+import com.task_management.Task.Management.dtos.taskDtos.TaskDto;
 import com.task_management.Task.Management.entities.Task;
 import org.mapstruct.Mapper;
 

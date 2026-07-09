@@ -1,13 +1,11 @@
 package com.task_management.Task.Management.controllers;
 
-import com.task_management.Task.Management.dtos.RegisterUserRequest;
-import com.task_management.Task.Management.dtos.UpdateUserRequest;
-import com.task_management.Task.Management.dtos.UserDto;
+import com.task_management.Task.Management.dtos.userDtos.RegisterUserRequest;
+import com.task_management.Task.Management.dtos.userDtos.UpdateUserRequest;
+import com.task_management.Task.Management.dtos.userDtos.UserDto;
 import com.task_management.Task.Management.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 

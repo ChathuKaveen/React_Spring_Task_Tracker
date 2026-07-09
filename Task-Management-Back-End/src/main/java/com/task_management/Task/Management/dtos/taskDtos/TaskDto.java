@@ -1,4 +1,4 @@
-package com.task_management.Task.Management.dtos;
+package com.task_management.Task.Management.dtos.taskDtos;
 
 import com.task_management.Task.Management.enums.TaskStatus;
 import lombok.AllArgsConstructor;

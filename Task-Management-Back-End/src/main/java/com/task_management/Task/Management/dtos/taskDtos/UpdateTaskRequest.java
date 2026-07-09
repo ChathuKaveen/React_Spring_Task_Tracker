@@ -1,4 +1,4 @@
-package com.task_management.Task.Management.dtos;
+package com.task_management.Task.Management.dtos.taskDtos;
 
 import com.task_management.Task.Management.enums.TaskStatus;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 public class UpdateTaskRequest {

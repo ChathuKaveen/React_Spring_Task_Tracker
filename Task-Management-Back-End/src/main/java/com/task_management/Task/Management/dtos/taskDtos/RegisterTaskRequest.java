@@ -1,8 +1,5 @@
-package com.task_management.Task.Management.dtos;
+package com.task_management.Task.Management.dtos.taskDtos;
 
-import com.task_management.Task.Management.entities.User;
-import com.task_management.Task.Management.enums.TaskStatus;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,8 +7,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 public class RegisterTaskRequest {

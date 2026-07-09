@@ -1,6 +1,6 @@
 package com.task_management.Task.Management.services;
 
-import com.task_management.Task.Management.dtos.TaskUpdateEventDto;
+import com.task_management.Task.Management.dtos.taskDtos.TaskUpdateEventDto;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;

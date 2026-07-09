@@ -1,9 +1,9 @@
 package com.task_management.Task.Management.controllers;
 
-import com.task_management.Task.Management.dtos.RegisterTaskRequest;
-import com.task_management.Task.Management.dtos.TaskDto;
-import com.task_management.Task.Management.dtos.TaskPageResponse;
-import com.task_management.Task.Management.dtos.UpdateTaskRequest;
+import com.task_management.Task.Management.dtos.taskDtos.RegisterTaskRequest;
+import com.task_management.Task.Management.dtos.taskDtos.TaskDto;
+import com.task_management.Task.Management.dtos.taskDtos.TaskPageResponse;
+import com.task_management.Task.Management.dtos.taskDtos.UpdateTaskRequest;
 import com.task_management.Task.Management.enums.TaskStatus;
 import com.task_management.Task.Management.mappers.TaskMapper;
 import com.task_management.Task.Management.services.TaskService;

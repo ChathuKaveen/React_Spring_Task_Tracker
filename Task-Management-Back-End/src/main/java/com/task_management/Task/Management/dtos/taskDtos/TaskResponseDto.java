@@ -1,4 +1,4 @@
-package com.task_management.Task.Management.dtos;
+package com.task_management.Task.Management.dtos.taskDtos;
 
 import lombok.Data;
 

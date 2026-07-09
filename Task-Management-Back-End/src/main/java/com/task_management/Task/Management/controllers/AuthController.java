@@ -2,8 +2,8 @@ package com.task_management.Task.Management.controllers;
 
 import com.task_management.Task.Management.config.JwtConfig;
 import com.task_management.Task.Management.dtos.JwtResponse;
-import com.task_management.Task.Management.dtos.LoginRequest;
-import com.task_management.Task.Management.dtos.UserDto;
+import com.task_management.Task.Management.dtos.userDtos.LoginRequest;
+import com.task_management.Task.Management.dtos.userDtos.UserDto;
 import com.task_management.Task.Management.mappers.UserMapper;
 import com.task_management.Task.Management.repositories.UserRepository;
 import com.task_management.Task.Management.services.JwtService;

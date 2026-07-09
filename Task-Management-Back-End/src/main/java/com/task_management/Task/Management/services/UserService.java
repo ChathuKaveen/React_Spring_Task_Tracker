@@ -1,8 +1,8 @@
 package com.task_management.Task.Management.services;
 
-import com.task_management.Task.Management.dtos.RegisterUserRequest;
-import com.task_management.Task.Management.dtos.UpdateUserRequest;
-import com.task_management.Task.Management.dtos.UserDto;
+import com.task_management.Task.Management.dtos.userDtos.RegisterUserRequest;
+import com.task_management.Task.Management.dtos.userDtos.UpdateUserRequest;
+import com.task_management.Task.Management.dtos.userDtos.UserDto;
 import com.task_management.Task.Management.enums.Role;
 import com.task_management.Task.Management.exceptions.NotEnoughPrevilagesException;
 import com.task_management.Task.Management.exceptions.UserAlreadyExisist;
