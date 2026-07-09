@@ -80,10 +80,10 @@
 <h2>📂 Project Structure</h2>
 <pre><code>.
 ├── Task-Management-Back-End/     # Spring Boot Source Code &amp; Dockerfile
+    ├── .env.example                  # Environment Configuration Template Example
+    ├── .env                          # Local Environment Configuration File (Ignored by Git)
 ├── Task-Management-Front-End/    # React Web Application &amp; Dockerfile
 ├── Postman/                      # Postman JSON Collection Export Files
-├── .env.example                  # Environment Configuration Template Example
-├── .env                          # Local Environment Configuration File (Ignored by Git)
 ├── db_export.sql                 # MySQL Schema Initialization Dump
 └── docker-compose.yml            # Parent Orchestration Deployment Template</code></pre>
 
